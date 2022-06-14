@@ -1,0 +1,16 @@
+version: "3"
+services:
+  presto:
+    image: presto
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./presto/coordinator_config.properties:/opt/presto/etc/config.properties
+      - ./presto/etc/catalog:/opt/presto/etc/catalog
+
+  presto-worker:
+    image: presto
+    volumes:
+      - ./presto/worker_config.properties:/opt/presto/etc/config.properties
+      - ./presto/etc/catalog:/opt/presto/etc/catalog
+

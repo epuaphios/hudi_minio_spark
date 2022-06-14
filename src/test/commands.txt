@@ -1,0 +1,24 @@
+spark-submit --class tr.com.ekalite.sparkTest.SBSparkJob ekalite-1.0-SNAPSHOT-jar-with-dependencies.jar --master yarn --deploy-mode cluster --num-executors 45 --driver-memory 8g --executor-memory 16g --executor-cores 4
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=c:/Development/turboard/spark/lib/ImpalaJDBC41.jar -DgroupId=com.cloudera -DartifactId=impala -Dversion=2.5.5  -Dpackaging=jar -DlocalRepositoryPath=lib
+
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=C:\Users\Saeid\IdeaProjects\SB-spark\lib\TCLIServiceClient.jar -DgroupId=org.apache -DartifactId=hive -Dversion=1.0.0  -Dpackaging=jar -DlocalRepositoryPath=lib
+spark2-submit --class tr.com.ekalite.sparkTest.SBSparkJob ekalite-1.0-SNAPSHOT-jar-with-dependencies.jar --master yarn --deploy-mode client --num-executors 45 --driver-memory 8g --executor-memory 16g --executor-cores 2
+
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=c:/Development/turboard/spark/lib/TCLIServiceClient.jar -DgroupId=org.apache -DartifactId=hive -Dversion=2.0.0  -Dpackaging=jar -DlocalRepositoryPath=lib
+
+mv target/ekalite-1.0-SNAPSHOT-jar-with-dependencies.jar target/ekalite-uygar-test.jar && scp target/ekalite-uygar-test.jar cloudera-scm@123:/tmp
+
+spark2-submit --class tr.com.ekalite.kds.UssStreamer /home/cloudera-scm/ekalite-1.0-SNAPSHOT-jar-with-dependencies.jar --master yarn --deploy-mode client --num-executors 45 --driver-memory 8g --executor-memory 16g --executor-cores 2 group_id40 prod sb-json-new sb-json-deleted
+
+spark2-submit \
+--class tr.com.ekalite.kds.UssStreamer \
+--master yarn \
+--deploy-mode client \
+--num-executors 45 \
+--driver-memory 8g \
+--executor-memory 16g \
+--executor-cores 2 \
+/home/cloudera-scm/spark-jobs/ekalite-1.0-SNAPSHOT-jar-with-dependencies.jar \
+group_id40 prod sb-json-new sb-json-deleted
+
+spark2-submit --conf "spark.driver.memory=8g" --conf "spark.executor.memory=8g"   --conf "spark.rpc.io.serverThreads=256" --conf  "spark.drive.extraJavaOptions=-XX:+UseG1GC" --conf "spark.executor.extraJavaOptions=-XX:+UseG1GC -XX:NewSize=1g"  --conf "spark.task.maxFailures=8" --conf "spark.kryoserializer.buffer=32m" --conf "spark.max.fetch.failures.per.stage=10" --conf  "spark.memory.fraction=0.05" --conf  "spark.memory.storageFraction=0.3"  --files /home/cloudera-scm/spark-app/kafkaOffsets.log  --class tr.com.ekalite.spark.SparkStreamApp /home/cloudera-scm/spark-app/ekalite-1.0-SNAPSHOT-jar-with-dependencies.jar

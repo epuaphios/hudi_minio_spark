@@ -1,0 +1,19 @@
+version: "3"
+services:
+  mariadb:
+    image: mariadb:latest
+    # image: mariadb/columnstore:latest
+    ports:
+      - 3306:3306
+    environment:
+      USE_S3_STORAGE: 0
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_DATABASE: metastore_db
+
+  hive:
+    image: 841aa9e07326
+    restart: unless-stopped
+    ports:
+      - 9083:9083
